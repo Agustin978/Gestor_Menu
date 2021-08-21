@@ -25,6 +25,7 @@ def crear_db():
         cursor.execute('''CREATE TABLE platos(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     nombre VARCHAR(100) UNIQUE NOT NULL,
+                    precio FLOAT NOT NULL,
                     categoria_id INTEGER NOT NULL,
                     FOREIGN KEY(categoria_id) REFERENCES categoria(id))
                     ''')
@@ -71,11 +72,13 @@ def agregar_plato():
         print("[{}]: {}".format(categoria[0], categoria[1]))
     
     opcion= int(input("Seleccione la categoria:\n>"))
-    plato= input("Ingrese el nombre del nuevo plato:\n>")
+    nombre= input("Ingrese el nombre del nuevo plato:\n>")
+    precio= float(input("Ingrese el valor del plato:\n>"))
+    plato=[nombre, precio]
 
     #Bloque try catch para evitar ingresar un plato ya exixstente
     try:
-        cursor.execute("INSERT INTO platos VALUES (null, '{}', {})".format(plato,opcion))
+        cursor.execute("INSERT INTO platos VALUES (null, '{}',{}, {})".format(plato[0],plato[1],opcion))
     except sqlite3.IntegrityError:
         print("El plato '{}' ya se encuentra almacenado en la base de datos del restaurante.".format(plato))
     else:
@@ -97,7 +100,7 @@ def mostrar_menu():
         print("\n\t{}".format(categoria[1]))
         platos= cursor.execute("SELECT * FROM platos WHERE categoria_id={}".format(categoria[0]))
         for plato in platos:
-            print("[{}]: {}".format(plato[0], plato[1]))
+            print("[{}]: {} ${}".format(plato[0], plato[1], plato[2]))
     
     #Cierre de la coneccion con la base de datos
     conection.close()
