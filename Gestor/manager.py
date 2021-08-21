@@ -2,6 +2,8 @@
 
 from os import PathLike
 import sqlite3
+from sqlite3.dbapi2 import Cursor, connect
+import helpers
 
 def crear_db():
     conection= sqlite3.connect("restaurante.db")
@@ -94,7 +96,8 @@ def agregar_plato():
 def mostrar_menu():
     conection= sqlite3.connect("restaurante.db")
     cursor= conection.cursor()
-
+    
+    helpers.clear()
     categorias= cursor.execute("SELECT * FROM categorias").fetchall()
     for categoria in categorias:
         print("\n\t{}".format(categoria[1]))
@@ -104,6 +107,47 @@ def mostrar_menu():
     
     #Cierre de la coneccion con la base de datos
     conection.close()
+
+#Funcion para eliminar platos del menu del restaurante
+def eliminar_plato():
+    conection= sqlite3.connect("restaurante.db")
+    cursor= conection.cursor()
+
+    categorias= cursor.execute("SELECT * FROM categorias").fetchall()
+    print("Ingrese a que categoria pertenece el plato que desea eliminar:")
+
+    for categoria in categorias:
+        print("[{}]: {}".format(categoria[0], categoria[1]))
+    
+    opcion= int(input("Seleccione la categoria:\n>"))
+
+    for categoria in categorias:
+        
+        if categoria[0]==opcion:
+            
+            platos= cursor.execute("SELECT * FROM platos WHERE categoria_id={}".format(categoria[0]))
+            print("Seleccione el plato que desea eliminar:")
+            
+            for plato in platos:
+                print("[{}]: {} ${}".format(plato[0], plato[1], plato[2]))
+            
+            try:
+                op= int(input("Ingrese el numero del plato que desea eliminar:\n>"))
+                cursor.execute("DELETE FROM platos WHERE id={}".format(op))
+            except ValueError:
+                print("Error al ingresar el id, el valor '{}' no es valido. Intente nuevamente.".format(op))
+            finally:
+                pass
+
+            print("Lista de platos de {}".format(categoria[1]))
+            for plato in platos:
+                print("[{}]: {} ${}".format(plato[0], plato[1], plato[2]))
+            
+            #Realizo el comit y cierro la coneccion con la base de datos
+            conection.commit()
+            conection.close()
+    
+                
 
 #Llamada a la funcion para crear la base de datos
 crear_db()
