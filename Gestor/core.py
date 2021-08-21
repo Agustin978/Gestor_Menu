@@ -1,8 +1,8 @@
 """Fichero principal"""
+import menu
 
 def main():
-    #TODO
-    pass
+   menu.loop()
 
 #Se ejecutara solo cuando se llame a core.py
 if __name__=="__main__":
