@@ -14,9 +14,9 @@ def loop():
         if opcion=="1":
             manager.agregar_categorias()
         elif opcion=="2":
-            pass 
+            manager.agregar_plato()
         elif opcion=="3":
-            pass
+            manager.mostrar_menu()
         elif opcion=="4":
             print("Gracias por usar nuestro programa.")
             break
