@@ -1,8 +1,7 @@
 """Administrador de la base de datos"""
 
+from os import PathLike
 import sqlite3
-from sqlite3.dbapi2 import Cursor, connect
-from typing_extensions import Concatenate
 
 def crear_db():
     conection= sqlite3.connect("restaurante.db")
@@ -61,3 +60,49 @@ def agregar_categorias():
     conection.close()
 
 #Funcion para agregar patos a las categorias
+def agregar_plato():
+    conection= sqlite3.connect("restaurante.db")
+    cursor= conection.cursor()
+
+    categorias= cursor.execute("SELECT * FROM categorias").fetchall()
+    print("\nInfgrese a que categoria pertenece el plato a ingresar")
+
+    for categoria in categorias:
+        print("[{}]: {}".format(categoria[0], categoria[1]))
+    
+    opcion= int(input("Seleccione la categoria:\n>"))
+    plato= input("Ingrese el nombre del nuevo plato:\n>")
+
+    #Bloque try catch para evitar ingresar un plato ya exixstente
+    try:
+        cursor.execute("INSERT INTO platos VALUES (null, '{}', {})".format(plato,opcion))
+    except sqlite3.IntegrityError:
+        print("El plato '{}' ya se encuentra almacenado en la base de datos del restaurante.".format(plato))
+    else:
+        print("El plato '{}' se almaceno correctamente en la base de datos.".format(plato))
+    finally:
+        pass
+
+    #Realizo el comit y el cierre de la base de datos
+    conection.commit()
+    conection.close()
+
+#Funcion para la muestra del menu completo del restaurante
+def mostrar_menu():
+    conection= sqlite3.connect("restaurante.db")
+    cursor= conection.cursor()
+
+    categorias= cursor.execute("SELECT * FROM categorias").fetchall()
+    for categoria in categorias:
+        print("\n\t{}".format(categoria[1]))
+        platos= cursor.execute("SELECT * FROM platos WHERE categoria_id={}".format(categoria[0]))
+        for plato in platos:
+            print("[{}]: {}".format(plato[0], plato[1]))
+    
+    #Cierre de la coneccion con la base de datos
+    conection.close()
+
+#Llamada a la funcion para crear la base de datos
+crear_db()
+
+
