@@ -1,7 +1,7 @@
 """Funciones ayuda"""
 
 import os
-#import platform
+import platform
 
 #Funciones para limpiar el boofer
 def clear():
