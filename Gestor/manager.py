@@ -146,6 +146,18 @@ def eliminar_plato():
             #Realizo el comit y cierro la coneccion con la base de datos
             conection.commit()
             conection.close()
+
+#Funcion para modificar datos de algun plato
+def modificar_plato():
+    helpers.clear()
+    conection= sqlite3.connect("restaurante.db")
+    cursor= conection.cursor()
+
+    categorias= cursor.execute("SELECT * FROM categorias").fetchall()
+    print("Ingrese a que categoria pertenece el plato que desea modificar: ")
+    
+
+
     
                 
 
