@@ -153,8 +153,22 @@ def modificar_plato():
     conection= sqlite3.connect("restaurante.db")
     cursor= conection.cursor()
 
-    categorias= cursor.execute("SELECT * FROM categorias").fetchall()
-    print("Ingrese a que categoria pertenece el plato que desea modificar: ")
+
+    modifica= input("Ingrese el nombre del plato que desea modificar:\n>")
+
+    try:
+        nombre= input("Ingrese el nombre del plato:\n>")
+        precio= float(input("Ingrese el valor del plato:\n>"))
+        plato=[nombre,precio]
+        cursor.execute("UPDATE platos SET nombre={}, precio={} WHERE nombre={}".format(plato[0], plato[1],modifica))
+    except sqlite3.ProgrammingError:
+        print("ERROR... No se encontro el plato solicitado. Intentelo nuevamente")
+    except ValueError:
+        print("Uno de los valores ingresados no es valido. Intente nuevamente")
+    finally:
+        pass
+    conection.commit()
+    conection.close()
     
 
 
