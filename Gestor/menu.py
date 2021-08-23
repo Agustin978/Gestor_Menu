@@ -6,7 +6,7 @@ import manager
 def loop():
     while True:
         print("\nBienvenido al gestor del restaurante.")
-        opcion= input("Ingrese una opcion:\n[1]Agregar una categoria.\n[2]Agregar un plato.\n[3]Mostrar menu.\n[4]Eliminar un plato.\n[5]Salir del programa.\nOpcion:")
+        opcion= input("Ingrese una opcion:\n[1]Agregar una categoria.\n[2]Agregar un plato.\n[3]Mostrar menu.\n[4]Eliminar un plato.\n[5]Modificar un Plato\n[6]Salir del programa.\nOpcion:")
         print("\n")
 
         helpers.clear()
@@ -20,6 +20,8 @@ def loop():
         elif opcion=="4":
             manager.eliminar_plato()
         elif opcion=="5":
+            manager.modificar_plato()
+        elif opcion=="6":
             print("Gracias por usar nuestro programa.")
             break
         else:
